@@ -26,6 +26,7 @@ module.exports = {
 
     //ESLint设置参见 http://eslint.org/docs/rules/semi [indent]
     'semi': ['error', 'always'], //结尾必须有分号
-    'indent': 0 //忽略代码缩进规则, 让WebStorm自动格式化的生效
+    'indent': 0, //忽略代码缩进规则, 让WebStorm自动格式化的生效
+    'space-before-function-paren': 0, //函数与参数列表的空格间不需要空格.
   }
 }
