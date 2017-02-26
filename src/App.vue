@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-header v-bind:seller="seller"></v-header>
+    <v-header v-bind:seller="seller" ></v-header>
     <div class="tab border-1px">
       <!-- 使用 router-link 组件来导航. -->
       <!-- 通过传入 `to` 属性指定链接. -->
@@ -17,7 +17,7 @@
     </div>
     <!-- 路由出口 -->
     <!-- 路由匹配到的组件将渲染在这里 -->
-    <router-view></router-view>
+    <router-view :seller="seller"></router-view>
   </div>
 </template>
 
