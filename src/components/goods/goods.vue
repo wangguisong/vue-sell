@@ -31,6 +31,9 @@
                   <span class="now">¥{{food.price}}</span><span class="old"
                                                                 v-show="food.oldPrice">¥{{food.oldPrice}}</span>
                 </div>
+                <div class="cartcontrol-wrapper">
+                  <cartcontrol :food="food"></cartcontrol>
+                </div>
               </div>
             </li>
           </ul>
@@ -45,6 +48,7 @@
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll';
   import shopcart from 'components/shopcart/shopcart';
+  import cartcontrol from 'components/cartcontrol/cartcontrol';
 
   const ERR_OK = 0;
 
@@ -103,7 +107,8 @@
         });
 
         this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
-          probeType: 3 // Options 1为即时触发，3为延迟到事件完毕后触发
+          probeType: 3, // Options 1为即时触发，3为延迟到事件完毕后触发
+          click: true
         });
 
         // 监听foodsScroll的滚动("scroll")事件, pos为当前滚动位置的坐标
@@ -123,7 +128,8 @@
       }
     },
     components: {
-      shopcart
+      shopcart,
+      cartcontrol
     }
   };
 </script>
@@ -231,4 +237,10 @@
             text-decoration line-through
             font-size 10px
             color rgb(147, 153, 159)
+        .cartcontrol-wrapper
+          position absolute
+          right 0
+          bottom 12px
+          vertical-align bottom
+
 </style>
