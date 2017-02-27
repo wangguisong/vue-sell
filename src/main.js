@@ -26,7 +26,7 @@ const routes = [
 // 3. 创建 router 实例，然后传 `routes` 配置, 你还可以传别的配置参数, 不过先这么简单着吧。
 // 参见Router 构造配置 http://router.vuejs.org/zh-cn/api/options.html
 const router = new VueRouter({
-  routes: routes, // （缩写）相当于 routes: routes
+  routes, // （缩写）相当于 routes: routes
   linkActiveClass: 'active' // 激活<router-link>时class类名
 });
 

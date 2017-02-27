@@ -15,11 +15,46 @@
         <div class="pay" :class="payClass">{{payDesc}}</div>
       </div>
     </div>
+    <div class="ball-container">
+      <transition-group
+        name="drop"
+        tag="div"
+        v-on:before-enter="beforeEnter"
+        v-on:enter="enter"
+        v-on:afterEnter="afterEnter">
+        <div class="ball" v-for="ball in balls" :key="ball" v-if="ball.show">
+          <div class="inner inner-hook"></div>
+        </div>
+      </transition-group>
+    </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import VueBus from 'common/js/vuebus';
   export default{
+    data() {
+      return {
+        balls: [
+          {
+            show: false
+          },
+          {
+            show: false
+          },
+          {
+            show: false
+          },
+          {
+            show: false
+          },
+          {
+            show: false
+          }
+        ],
+        dropBalls: []
+      };
+    },
     props: {
       selectFoods: {
         type: Array,
@@ -76,7 +111,65 @@
       }
     },
     created() {
-      // console.log(this);
+      VueBus.$on('add-cart', this.addCartListener);
+    },
+    beforeDestroy() {
+      // this.$off('add-cart', this.....);
+    },
+    methods: {
+      addCartListener(el) {
+        console.log(el);
+        for (let i = 0; i < this.balls.length; i++) {
+          let ball = this.balls[i];
+          if (!ball.show) {
+            ball.show = true;
+            ball.el = el;
+            this.dropBalls.push(ball);
+            return;
+          }
+        }
+      },
+
+      beforeEnter(el) {
+        console.log('beforeEnter');
+        let count = this.balls.length;
+        while (count--) {
+          let ball = this.balls[count];
+          if (ball.show) {
+            // 获取cartcontrol控件触发点的坐标.
+            let rect = ball.el.getBoundingClientRect();
+            // 将rect减去小球的宽高, 即小球的左下角的坐标.
+            let x = rect.left - 32;
+            let y = -(window.innerHeight - rect.top - 32);
+            el.style.display = '';
+            el.style.webkitTransform = `translate3d(0, ${y}px, 0)`;
+            el.style.transform = `translate3d(0, ${y}px, 0)`;
+            let inner = el.getElementsByClassName('inner-hook')[0];
+            inner.style.webkitTransform = `translate3d(${x}px, 0, 0)`;
+            inner.style.transform = `translate3d(${x}px, 0, 0)`;
+          }
+        }
+      },
+      enter(el) {
+        /* eslint-disable no-unused-vars */
+        console.log('enter');
+        let rf = el.offsetHeight; // 手动触发浏览器重绘
+        this.$nextTick(() => {
+          el.style.webkitTransform = 'translate3d(0, 0, 0)';
+          el.style.transform = 'translate3d(0, 0, 0)';
+          let inner = el.getElementsByClassName('inner-hook')[0];
+          inner.style.webkitTransform = 'translate3d(0, 0, 0)';
+          inner.style.transform = 'translate3d(0, 0, 0)';
+        });
+      },
+      afterEnter(el) {
+        console.log('afterEnter');
+        let ball = this.dropBalls.shift();
+        if (ball) {
+          ball.show = false;
+          el.style.display = 'none';
+        }
+      }
     }
   };
 </script>
@@ -173,6 +266,22 @@
           &.enough
             background #00b43c
             color #ffffff
-
+    .ball-container
+      .ball
+        position fixed
+        left 32px
+        bottom 22px
+        z-index 200
+        /* 可以设置不同的进入和离开动画 */
+        /* 设置持续时间和动画函数 */
+        &.drop-enter-active {
+          transition: all .4s cubic-bezier(.49, -0.29, .75, .41);
+        }
+        .inner
+          width 16px
+          height 16px
+          border-radius 50%
+          background rgb(0, 160, 220)
+          transition all .4s linear
 
 </style>

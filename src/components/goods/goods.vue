@@ -40,7 +40,8 @@
         </li>
       </ul>
     </div>
-    <shopcart :delivery-price="seller.deliveryPrice"
+    <shopcart :select-foods="selectFoods"
+              :delivery-price="seller.deliveryPrice"
               :min-price="seller.minPrice"/>
   </div>
 </template>
@@ -75,6 +76,17 @@
           }
         }
         return 0;
+      },
+      selectFoods() {
+        let foods = [];
+        this.goods.forEach((good) => {
+          good.foods.forEach((food) => {
+            if (food.count) {
+              foods.push(food);
+            }
+          });
+        });
+        return foods;
       }
     },
     created() {
@@ -211,36 +223,34 @@
           margin-right 10px
         .content
           flex 1
-          margin 2px 0 8px 0
-          height 14px
-          line-height 14px
+          margin 2px 0 0px 0
           font-size 14px
           color rgb(7, 17, 27)
-        .desc, .extra
-          line-height 10px
-          font-size 10px
-          color rgb(147, 153, 159)
-        .desc
-          margin-top 8px
-          margin-bottom 8px
-        .extra
-          .count
-            margin-right 12px
-        .price
-          foot-weight 700
-          line-height 24px
-          .now
-            margin-right 18px
-            font-size 14px
-            color rgb(240, 20, 20)
-          .old
-            text-decoration line-through
+          .desc, .extra
+            line-height 10px
             font-size 10px
             color rgb(147, 153, 159)
-        .cartcontrol-wrapper
-          position absolute
-          right 0
-          bottom 12px
-          vertical-align bottom
+          .desc
+            margin-top 8px
+            margin-bottom 8px
+          .extra
+            .count
+              margin-right 12px
+          .price
+            foot-weight 700
+            line-height 24px
+            .now
+              margin-right 18px
+              font-size 14px
+              color rgb(240, 20, 20)
+            .old
+              text-decoration line-through
+              font-size 10px
+              color rgb(147, 153, 159)
+          .cartcontrol-wrapper
+            position absolute
+            right 0
+            bottom 12px
+            vertical-align bottom
 
 </style>
