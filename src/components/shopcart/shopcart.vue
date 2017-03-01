@@ -255,6 +255,8 @@
     width 100%
     height 48px
     .content
+      position: relative
+      z-index: 10
       display flex
       font-size 0
       background #141d27
@@ -357,7 +359,7 @@
       position absolute
       left 0
       bottom 48px
-      z-index -1
+      z-index 5
       width 100%
       &.fold-enter-active, &.fold-leave-active {
         transition: all .5s ease-out;
@@ -412,7 +414,7 @@
       top 0
       width 100%
       height 100%
-      z-index -2
+      z-index 4
       background rgba(7, 17, 27, 0.6)
       backdrop-filter blur(10px) // IOS的模糊效果
       &.fade-enter-active, &.fade-leave-active

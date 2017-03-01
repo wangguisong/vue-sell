@@ -17,7 +17,8 @@
         <li v-for="item in goods" class="food-list food-list-hook">
           <h1 class="title">{{item.name}}</h1>
           <ul>
-            <li v-for="food in item.foods" class="food-item broker-1px">
+            <li class="food-item broker-1px" v-for="food in item.foods"
+                @click="clickFood(food, $event)">
               <div class="icon">
                 <img width="57" height="57" :src="food.icon"/>
               </div>
@@ -43,6 +44,7 @@
     <shopcart :select-foods="selectFoods"
               :delivery-price="seller.deliveryPrice"
               :min-price="seller.minPrice"/>
+    <food :food="curClickFood" ref="food"></food>
   </div>
 </template>
 
@@ -50,6 +52,7 @@
   import BScroll from 'better-scroll';
   import shopcart from 'components/shopcart/shopcart';
   import cartcontrol from 'components/cartcontrol/cartcontrol';
+  import food from 'components/food/food';
 
   const ERR_OK = 0;
 
@@ -63,7 +66,8 @@
       return {
         goods: [],
         listHeight: [],
-        scrollY: 0
+        scrollY: 0,
+        curClickFood: {}
       };
     },
     computed: { // 计算属性
@@ -103,6 +107,13 @@
       });
     },
     methods: {
+      clickFood(food, event) {
+        if (!event._constructed) {
+          return;
+        }
+        this.curClickFood = food;
+        this.$refs.food.show();
+      },
       selectMenu(index, event) {
         // 只有better-scroll插件触发的事件才会有_constructed, 当没有时就说明是浏览器触发的事件.
         if (!event._constructed) return;
@@ -141,7 +152,8 @@
     },
     components: {
       shopcart,
-      cartcontrol
+      cartcontrol,
+      food
     }
   };
 </script>
