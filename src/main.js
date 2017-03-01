@@ -37,7 +37,7 @@ new Vue({
 }).$mount('#app');
 
 // 默认导航
-router.replace('goods');
+// router.replace('goods');
 
 // 跳过 eslint代码检查规则: eslint-disable no-new
 /* eslint-disable no-new */

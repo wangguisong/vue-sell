@@ -264,7 +264,6 @@
         padding 0 8px
         font-size 12px
         color rgb(77, 85, 93)
-
     .ratings
       padding-top 18px
       .title

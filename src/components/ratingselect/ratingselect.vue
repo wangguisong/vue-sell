@@ -53,7 +53,7 @@
         default() {
           return {
             all: '全部',
-            position: '满意',
+            positive: '满意',
             negative: '不满意'
           };
         }
@@ -62,12 +62,12 @@
     computed: {
       positives() {
         return this.ratings.filter((rating) => {
-          return rating.ratingType === POSITIVE;
+          return rating.rateType === POSITIVE;
         });
       },
       negatives() {
         return this.ratings.filter((rating) => {
-          return rating.ratingType === NEGATIVE;
+          return rating.rateType === NEGATIVE;
         });
       }
     },

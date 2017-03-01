@@ -68,7 +68,7 @@
       .star-item
         width 15px
         height 15px
-        margin-right 16px
+        margin-right 8px
         background-size 15px 15px
         &.on
           bg-image('star36_on')
@@ -80,7 +80,7 @@
       .star-item
         width 20px
         height 20px
-        margin-right 22px
+        margin-right 10px
         background-size 20px 20px
         &.on
           bg-image('star48_on')
