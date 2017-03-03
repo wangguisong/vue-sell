@@ -17,20 +17,33 @@
     </div>
     <!-- 路由出口 -->
     <!-- 路由匹配到的组件将渲染在这里 -->
-    <router-view :seller="seller"></router-view>
+    <keep-alive>
+      <router-view :seller="seller"></router-view>
+    </keep-alive>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import Header from 'components/header/header.vue';
-
+  import {urlParse} from 'common/js/util';
   const ERR_OK = 0;
 
   export default {
     data() {
       return {
-        seller: {}
+        seller: {
+          id: (() => {
+            let queryParam = urlParse();
+            return queryParam.id;
+          })()
+        }
       };
+    },
+    computed: {
+      sellerId() {
+        let queryParam = urlParse();
+        return queryParam.id;
+      }
     },
     created: function () {
       this.getSellerInfo();
@@ -40,10 +53,11 @@
     },
     methods: {
       getSellerInfo: function () {
-        this.$http.get('/api/seller').then((res) => {
+        console.log('seller.id=' + this.seller.id);
+        this.$http.get('/api/seller?id=' + this.seller.id).then((res) => {
           var response = res.body;
           if (response.errno === ERR_OK) {
-            this.seller = response.data;
+            this.seller = Object.assign({}, this.seller, response.data);
             // console.log(this.seller);
           }
         });

@@ -1,5 +1,5 @@
 <template>
-  <div class="seller-wrapper" ref="seller_scroll">
+  <div class="seller-wrapper" ref="sellerWrapper">
     <div class="seller-content">
       <div class="overview">
         <h1 class="title">{{seller.name}}</h1>
@@ -28,6 +28,10 @@
             </div>
           </li>
         </ul>
+        <div class="favorite" @click="toggleFavorite($event)">
+          <span class="icon-favorite" :class="{'active': favorite}"></span>
+          <span class="text">{{favoriteText}}</span>
+        </div>
       </div>
       <split></split>
       <div class="bulletin">
@@ -45,13 +49,22 @@
       <split></split>
       <div class="pics">
         <h1 class="title">商家实景</h1>
-        <div class="pic-wrapper">
-          <ul class="pic-list" ref="pic_scroll">
+        <div class="pic-wrapper" ref="picWrapper">
+          <ul class="pic-list" ref="picList">
             <li class="pic-item" v-for="pic in seller.pics">
               <img :src="pic" width="120" height="90">
             </li>
           </ul>
         </div>
+      </div>
+      <split></split>
+      <div class="info">
+        <h1 class="title border-1px">商家信息</h1>
+        <ul>
+          <li class="info-item" v-for="info in seller.infos">
+            {{info}}
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -61,11 +74,24 @@
   import BScroll from 'better-scroll';
   import star from 'components/star/star';
   import split from 'components/split/split';
+  import {saveToLocal, loadFromLocal} from 'common/js/store';
   export default{
     props: {
       seller: {
         type: Object,
         deep: true
+      }
+    },
+    data() {
+      return {
+        favorite: (() => {
+          return loadFromLocal(this.seller.id, 'favorite', false);
+        })()
+      };
+    },
+    computed: {
+      favoriteText() {
+        return this.favorite ? '已收藏' : '收藏';
       }
     },
     created() {
@@ -88,10 +114,17 @@
       }
     },
     methods: {
+      toggleFavorite(event) {
+        if (!event._constructed) {
+          return;
+        }
+        this.favorite = !this.favorite;
+        saveToLocal(this.seller.id, 'favorite', this.favorite);
+      },
       _initScroll() {
         console.log('_initScroll');
         if (!this.scroll) {
-          this.scroll = new BScroll(this.$refs.seller_scroll, {
+          this.scroll = new BScroll(this.$refs.sellerWrapper, {
             click: true
           });
         } else {
@@ -105,12 +138,10 @@
           let margin = 6;
           let width = (picWidth + margin) * this.seller.pics.length - margin;
           console.log('size=' + this.seller.pics.length + ', width=' + width);
-          this.$refs.pic_scroll.style.width = width + 'px';
+          this.$refs.picList.style.width = width + 'px';
           if (!this.picScroll) {
-
-            this.picScroll = new BScroll(this.$refs.pic_scroll, {
-              scrollY: false,
-              startX: 0,
+            this.picScroll = new BScroll(this.$refs.picWrapper, {
+              scrollX: true,
               eventPassthrough: 'vertical'
             });
           } else {
@@ -179,7 +210,24 @@
             color rgb(7, 17, 27)
             .unit
               font-size 10px
-
+      .favorite
+        position absolute
+        width 50px
+        right 11px
+        top 18px
+        text-align center
+        .icon-favorite
+          display block
+          margin-bottom 4px
+          line-height 24px
+          font-size 24px
+          color #d4d6d9
+          &.active
+            color rgb(240, 20, 20)
+        .text
+          line-height 10px
+          font-size 10px
+          color rgb(77, 85, 93)
     .bulletin
       padding 18px 18px 0 18px
       .title
@@ -243,4 +291,19 @@
             height 90px
             &:last-child
               margin 0
+    .info
+      padding 18px 18px 0 18px
+      color rgb(7, 17, 27)
+      .title
+        padding-bottom 12px
+        line-height 14px
+        font-size 14px
+        border-1px(rgba(7, 17, 27, 0.1))
+      .info-item
+        padding 16px 12px
+        line-height 16px
+        border-1px(rgba(7, 17, 27, 0.1))
+        font-size 12px
+        &:last-child
+          border-none()
 </style>
